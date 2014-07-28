@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature id="org.rosi.troml.sdk"
+	label="TRoML SDK Feature "
+	version="1.0.0.qualifier">
+	<plugin
+			id="org.rosi.troml"
+			download-size="0"
+			install-size="0"
+			version="0.0.0"
+			unpack="false"/>
+	<plugin
+			id="org.rosi.troml.ui"
+			download-size="0"
+			install-size="0"
+			version="0.0.0"
+			unpack="false"/>
+</feature>
