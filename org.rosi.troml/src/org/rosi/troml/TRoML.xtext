@@ -122,7 +122,7 @@ Relationship returns crom::Relationship:
 	(':' tr_constraints+=IntraRelationshipConstraint (',' tr_constraints+=IntraRelationshipConstraint)*)?;
 
 Place returns crom::Place:
-	holder=[crom::RoleType|EString]
+	holder=[crom::RoleType|QualifiedName]
 	('[' lower=INT '..' upper=INT ']' |
 	'[' lower=INT '..' '*' ']' |
 	'[*]')?;
