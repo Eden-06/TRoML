@@ -8,9 +8,7 @@ import "http://www.eclipse.org/xtext/common/JavaVMTypes" as type
 //Main model element
 Model returns crom::Model:
 	{crom::Model}
-	(elements+=ModelElement)+
-	('relations:'
-	(relations+=ModelRelations)*)?;
+	(elements+=ModelElement | relations+=ModelRelations)*;
 
 ModelRelations returns crom::Relation:
 	Fulfillment ';'?;
@@ -25,8 +23,8 @@ enum Direction returns crom::Direction:
 EString returns ecore::EString:
 	STRING | ID;
 
-//terminal PINT returns ecore::EInt:
-//	('0'..'9')+;
+QualifiedName:
+	ID ('.' ID)*;
 
 Extends:
 	'extends' | ':';
@@ -99,27 +97,25 @@ AbstractRole returns crom::AbstractRole:
 
 RoleType returns crom::RoleType:
 	{crom::RoleType}
-	'role' name=EString  (Extends tr_extends=[crom::RoleType])?
+	'role' name=EString (Extends tr_extends=[crom::RoleType])?
 	'{'
 	(attributes+=Attribute | operations+=Operation)*
 	'}';
 
 RoleGroup returns crom::RoleGroup:
-	'rolegroup' name=EString 
-	(	('#'| 'selecting') lower=INT ('..'|'upto') upper=INT |
-		('#'| 'selecting') lower=INT ('..'|'upto') '*' |
-		('#'| 'selecting') '*')?
+	'rolegroup' name=EString
+	(('#' | 'selecting') lower=INT ('..' | 'upto') upper=INT |
+	('#' | 'selecting') lower=INT ('..' | 'upto') '*' |
+	('#' | 'selecting') '*')?
 	'{'
 	(elements+=RoleGroupElement (elements+=RoleGroupElement)*)?
 	'}';
 
 RoleGroupElement returns crom::RoleGroupElement:
-	RoleType | RoleGroup | AbstractRoleReference
-;
+	RoleType | RoleGroup | AbstractRoleReference;
 
 AbstractRoleReference returns crom::AbstractRoleRef:
-	ref=[crom::AbstractRole|EString] (';')?
-;
+	ref=[crom::AbstractRole|QualifiedName] (';')?;
 
 Relationship returns crom::Relationship:
 	name=ID '(' first=Place direction=Direction second=Place ')'
@@ -139,35 +135,34 @@ RoleConstraint returns crom::RoleConstraint:
 	RoleImplication | RoleEquivalence | RoleProhibition;
 
 RoleImplication returns crom::RoleImplication:
-	(first=[crom::RoleType] ('implies' |'->' | '>') second=[crom::RoleType] |
-	second=[crom::RoleType] ('<-' | '<') first=[crom::RoleType]) ';';
+	(first=[crom::RoleType|QualifiedName] ('implies' | '->' | '>') second=[crom::RoleType|QualifiedName] |
+	second=[crom::RoleType|QualifiedName] ('<-' | '<') first=[crom::RoleType|QualifiedName]) ';';
 
 RoleEquivalence returns crom::RoleEquivalence:
-	first=[crom::RoleType] ('equals' | '<->' | '<>') second=[crom::RoleType] ';';
+	first=[crom::RoleType|QualifiedName] ('equals' | '<->' | '<>') second=[crom::RoleType|QualifiedName] ';';
 
 RoleProhibition returns crom::RoleProhibition:
-	first=[crom::RoleType] ('prohibits' | '><' | '>-<') second=[crom::RoleType] ';';
+	first=[crom::RoleType|QualifiedName] ('prohibits' | '><' | '>-<') second=[crom::RoleType|QualifiedName] ';';
 
 RelationshipConstraints returns crom::RelationshipConstraint:
 	IntraRelationshipConstraint | InterRelationshipConstraint;
-	
-//TODO: allow the definition of multiple constraints for one relationship
+
+	//TODO: allow the definition of multiple constraints for one relationship
 //IntraRelationshipConstraint returns crom::IntraRelationshipConstraint:
 //	({crom::Total} relation=[crom::Relationship|EString] (':' | 'is') 'total' |
 //	{crom::Cyclic} relation=[crom::Relationship|EString] (':' | 'is') 'cyclic' |
 //	{crom::Irreflexive} relation=[crom::Relationship|EString] (':' | 'is') 'irreflexive' |
 //	{crom::ParthoodConstraint} relation=[crom::Relationship|EString] (':' | 'is') kind=Parthood);
-
 IntraRelationshipConstraint returns crom::IntraRelationshipConstraint:
-	({crom::Total} 'total'  |
+	({crom::Total} 'total' |
 	{crom::Cyclic} 'cyclic' |
 	{crom::Irreflexive} 'irreflexive' |
 	{crom::ParthoodConstraint} kind=Parthood);
 
 InterRelationshipConstraint returns crom::InterRelationshipConstraint:
 	{crom::RelationshipImplication}
-	(first=[crom::Relationship|EString] ('subset of'|'==>') second=[crom::Relationship|EString] |
-	second=[crom::Relationship|EString] ('superset of'|'<==') first=[crom::Relationship|EString]);
+	(first=[crom::Relationship|EString] ('subset of' | '==>') second=[crom::Relationship|EString] |
+	second=[crom::Relationship|EString] ('superset of' | '<==') first=[crom::Relationship|EString]);
 
 enum Parthood returns crom::Parthood:
 	ExclusivePart='exclusivepart' | SharablePart='sharablepart' | EssentialPart='essentialpart' |
@@ -175,11 +170,11 @@ enum Parthood returns crom::Parthood:
 
 	//Definition of Fulfillment 
 Fulfillment returns crom::Fulfillment:
-	filler=[crom::RigidType] Fills filled=[crom::AbstractRole];
+	filler=[crom::RigidType] Fills filled=[crom::AbstractRole|QualifiedName];
 
 	//continue the definition
 ComplexConstraint returns crom::ComplexConstraint:
-	'invariant' 'using' targets+=[crom::AbstractRole] ("," targets+=[crom::AbstractRole])*
+	'invariant' 'using' targets+=[crom::AbstractRole|QualifiedName] ("," targets+=[crom::AbstractRole|QualifiedName])*
 	'ensure' expression=EString;
 
 
