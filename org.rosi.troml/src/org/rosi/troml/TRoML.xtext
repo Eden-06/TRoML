@@ -34,15 +34,15 @@ Fills:
 
 	//Definition of basic model element properties
 Attribute returns crom::Attribute:
-	name=ID ':' type=[crom::RigidType|EString] ';'; //TODO: Replace ESTRING with QualifiedName
+	name=ID ':' type=[crom::RigidType|QualifiedName] ';';
 
 Parameter returns crom::Parameter:
 	{crom::Parameter}
-	name=ID ':' type=[crom::RigidType|EString]; //TODO: Replace ESTRING with QualifiedName
+	name=ID ':' type=[crom::RigidType|QualifiedName];
 
 Operation returns crom::Operation:
 	name=ID
-	'(' (params+=Parameter ("," params+=Parameter)*)? ')' ':' type=[crom::RigidType|EString] //TODO: Replace ESTRING with QualifiedName
+	'(' (params+=Parameter ("," params+=Parameter)*)? ')' ':' type=[crom::RigidType|QualifiedName]
 	'{'
 	operation=EString
 	'}';
@@ -63,14 +63,14 @@ Group returns crom::Group:
 DataType returns crom::DataType:
 	{crom::DataType}
 	(serializable?='serializable')?
-	'data' name=ID (Extends tr_extends=[crom::DataType])? //TODO: Replace ESTRING with QualifiedName
+	'data' name=ID (Extends tr_extends=[crom::DataType|QualifiedName])?
 	'{'
 	(attributes+=Attribute | operations+=Operation)*
 	'}';
 
 NaturalType returns crom::NaturalType:
 	{crom::NaturalType}
-	'natural' name=ID (Extends tr_extends=[crom::NaturalType])? //TODO: Replace ESTRING with QualifiedName
+	'natural' name=ID (Extends tr_extends=[crom::NaturalType|QualifiedName])?
 	'{'
 	(attributes+=Attribute | operations+=Operation)*
 	'}';
@@ -78,7 +78,7 @@ NaturalType returns crom::NaturalType:
 	//Definition of Compartments
 CompartmentType returns crom::CompartmentType:
 	{crom::CompartmentType}
-	'compartment' name=ID (Extends tr_extends=[crom::CompartmentType])? //TODO: Replace ESTRING with QualifiedName
+	'compartment' name=ID (Extends tr_extends=[crom::CompartmentType|QualifiedName])?
 	'{'
 	('interface:' (attributes+=Attribute | operations+=Operation)*)?
 	('rolemodel:' (parts+=Part | relationships+=Relationship)*)?
@@ -155,8 +155,8 @@ IntraRelationshipConstraint returns crom::IntraRelationshipConstraint:
 
 InterRelationshipConstraint returns crom::InterRelationshipConstraint: //TODO: Replace ESTRING with QualifiedName
 	{crom::RelationshipImplication}
-	(first=[crom::Relationship|EString] ('subset of' | '==>') second=[crom::Relationship|EString] |
-	second=[crom::Relationship|EString] ('superset of' | '<==') first=[crom::Relationship|EString]);
+	(first=[crom::Relationship|QualifiedName] ('subset of' | '==>') second=[crom::Relationship|QualifiedName] |
+	second=[crom::Relationship|QualifiedName] ('superset of' | '<==') first=[crom::Relationship|QualifiedName]);
 
 enum Parthood returns crom::Parthood:
 	ExclusivePart='exclusivepart' | SharablePart='sharablepart' | EssentialPart='essentialpart' |
