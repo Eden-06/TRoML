@@ -53,7 +53,7 @@ RigidType returns crom::RigidType:
 
 Group returns crom::Group:
 	{crom::Group}
-	'group' name=EString
+	'group' name=ID
 	'{'
 	(elements+=ModelElement)*
 	('relations:'
@@ -63,14 +63,14 @@ Group returns crom::Group:
 DataType returns crom::DataType:
 	{crom::DataType}
 	(serializable?='serializable')?
-	'data' name=EString (Extends tr_extends=[crom::DataType])? //TODO: Replace ESTRING with QualifiedName
+	'data' name=ID (Extends tr_extends=[crom::DataType])? //TODO: Replace ESTRING with QualifiedName
 	'{'
 	(attributes+=Attribute | operations+=Operation)*
 	'}';
 
 NaturalType returns crom::NaturalType:
 	{crom::NaturalType}
-	'natural' name=EString (Extends tr_extends=[crom::NaturalType])? //TODO: Replace ESTRING with QualifiedName
+	'natural' name=ID (Extends tr_extends=[crom::NaturalType])? //TODO: Replace ESTRING with QualifiedName
 	'{'
 	(attributes+=Attribute | operations+=Operation)*
 	'}';
@@ -78,7 +78,7 @@ NaturalType returns crom::NaturalType:
 	//Definition of Compartments
 CompartmentType returns crom::CompartmentType:
 	{crom::CompartmentType}
-	'compartment' name=EString (Extends tr_extends=[crom::CompartmentType])? //TODO: Replace ESTRING with QualifiedName
+	'compartment' name=ID (Extends tr_extends=[crom::CompartmentType])? //TODO: Replace ESTRING with QualifiedName
 	'{'
 	('interface:' (attributes+=Attribute | operations+=Operation)*)?
 	('rolemodel:' (parts+=Part | relationships+=Relationship)*)?
@@ -97,13 +97,13 @@ AbstractRole returns crom::AbstractRole:
 
 RoleType returns crom::RoleType:
 	{crom::RoleType}
-	'role' name=EString (Extends tr_extends=[crom::RoleType])?
+	'role' name=ID (Extends tr_extends=[crom::RoleType])?
 	'{'
 	(attributes+=Attribute | operations+=Operation)*
 	'}';
 
 RoleGroup returns crom::RoleGroup:
-	'rolegroup' name=EString
+	'rolegroup' name=ID
 	(('#' | 'selecting') lower=INT ('..' | 'upto') upper=INT |
 	('#' | 'selecting') lower=INT ('..' | 'upto') '*' |
 	('#' | 'selecting') '*')?
