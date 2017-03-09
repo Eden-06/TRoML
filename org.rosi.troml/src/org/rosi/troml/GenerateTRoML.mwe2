@@ -18,6 +18,7 @@ Workflow {
     	// The following two lines can be removed, if Xbase is not used.
     	registerGeneratedEPackage = "crom_l1_composed.Crom_l1_composedPackage"
 		registerGenModelFile = "platform:/resource/org.rosi.crom.metamodel/src-gen/crom_l1_composed.genmodel"
+
     	registerGeneratedEPackage = "org.eclipse.xtext.xbase.XbasePackage"
     	registerGenModelFile = "platform:/resource/org.eclipse.xtext.xbase/model/Xbase.genmodel"
     }
